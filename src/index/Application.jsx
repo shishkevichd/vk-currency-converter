@@ -18,6 +18,10 @@ import {
   SimpleCell,
   Header,
   Spacing,
+  FormLayout,
+  FormItem,
+  Input,
+  Button,
 } from "@vkontakte/vkui";
 
 export default function Application() {
@@ -29,29 +33,19 @@ export default function Application() {
         <SplitCol autoSpaced>
           <View activePanel="main">
             <Panel id="main">
-              <PanelHeader>VK Mini App</PanelHeader>
-              <Group header={<Header mode="secondary">Счёт</Header>}>
-                <SimpleCell
-                  hasActive={false}
-                  hasHover={false}
-                  before={<Icon28InfoOutline />}
-                  subhead="На вашем счёте"
-                >
-                  {count}₽
-                </SimpleCell>
-                <Spacing size={10} />
-                <SimpleCell
-                  onClick={() => setCount((count) => count + 1)}
-                  before={<Icon28AddCircleOutline />}
-                >
-                  Прибавить
-                </SimpleCell>
-                <SimpleCell
-                  before={<Icon28CancelOutline />}
-                  onClick={() => setCount(0)}
-                >
-                  Обнулить счёт
-                </SimpleCell>
+              <PanelHeader>Конвертер валют</PanelHeader>
+              <Group header={<Header mode="secondary">Настройки</Header>}>
+                <FormLayout>
+                  <FormItem top="Из">
+                    <Input />
+                  </FormItem>
+                  <FormItem top="В">
+                    <Input />
+                  </FormItem>
+                  <FormItem>
+                    <Button mode="primary" stretched size="l">Конвертировать!</Button>
+                  </FormItem>
+                </FormLayout>
               </Group>
             </Panel>
           </View>
