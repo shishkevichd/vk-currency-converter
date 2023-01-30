@@ -15,10 +15,6 @@ bridge.send("VKWebAppInit");
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ConfigProvider>
-      <AdaptivityProvider>
-        <Application />
-      </AdaptivityProvider>
-    </ConfigProvider>
+    <Application />
   </React.StrictMode>
 );
