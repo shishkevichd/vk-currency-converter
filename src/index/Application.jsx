@@ -21,6 +21,7 @@ import {
   NativeSelect,
   FormLayoutGroup,
   ConfigProvider,
+  AdaptivityProvider,
 } from "@vkontakte/vkui";
 
 // VK Bridge
@@ -92,59 +93,61 @@ export default function Application() {
 
   return (
     <ConfigProvider appearance={appearance}>
-      <AppRoot>
-        <SplitLayout header={<PanelHeader separator={false} />}>
-          <SplitCol autoSpaced>
-            <View activePanel="main">
-              <Panel id="main">
-                <PanelHeader>Конвертер валют</PanelHeader>
-                <Group header={<Header mode="secondary">Настройки</Header>}>
-                  {loadingState ? (
-                    <Spinner />
-                  ) : (
-                    <FormLayout>
-                      <FormLayoutGroup mode="horizontal" segmented>
-                        <FormItem top="Из какой валюты?">
-                          <Input onChange={(e) => setCurrentMoney(e.target.value)} value={currentMoney} />
-                        </FormItem>
-                        <FormItem>
-                          <NativeSelect onChange={(e) => setFromValue(e.target.value)} value={fromValue}>
+      <AdaptivityProvider>
+        <AppRoot>
+          <SplitLayout header={<PanelHeader separator={false} />}>
+            <SplitCol>
+              <View activePanel="main">
+                <Panel id="main">
+                  <PanelHeader>Конвертер валют</PanelHeader>
+                  <Group header={<Header mode="secondary">Настройки</Header>}>
+                    {loadingState ? (
+                      <Spinner />
+                    ) : (
+                      <FormLayout>
+                        <FormLayoutGroup mode="horizontal" segmented>
+                          <FormItem top="Из какой валюты?">
+                            <Input onChange={(e) => setCurrentMoney(e.target.value)} value={currentMoney} />
+                          </FormItem>
+                          <FormItem>
+                            <NativeSelect onChange={(e) => setFromValue(e.target.value)} value={fromValue}>
+                              {availableCurriences.map((cur) => (
+                                <option key={cur} value={cur}>{cur.toUpperCase()}</option>
+                              ))}
+                            </NativeSelect>
+                          </FormItem>
+                        </FormLayoutGroup>
+                        <FormItem top="В какую валюту?">
+                          <NativeSelect onChange={(e) => setToValue(e.target.value)} value={toValue}>
                             {availableCurriences.map((cur) => (
-                              <option key={cur} value={cur}>{cur.toUpperCase()}</option>
+                              <option value={cur}>{cur.toUpperCase()}</option>
                             ))}
                           </NativeSelect>
                         </FormItem>
-                      </FormLayoutGroup>
-                      <FormItem top="В какую валюту?">
-                        <NativeSelect onChange={(e) => setToValue(e.target.value)} value={toValue}>
-                          {availableCurriences.map((cur) => (
-                            <option value={cur}>{cur.toUpperCase()}</option>
-                          ))}
-                        </NativeSelect>
-                      </FormItem>
-                      <Checkbox onChange={(e) => setButtonActive(e.target.checked)} checked={buttonActive}>Активировать кнопку</Checkbox>
-                      <FormItem>
-                        <Button onClick={convertValue} disabled={!buttonActive} mode="primary" stretched size="l">Конвертировать!</Button>
-                      </FormItem>
-                    </FormLayout>
-                  )}
-                </Group>
-                {!["passive", "error"].includes(result.status) ? (
-                  <Group header={<Header mode="secondary">Результат</Header>}>
-                    {result.status == "active" ? (
-                      <SimpleCell subtitle={`${result.data["fromValue"].toUpperCase()} => ${result.data["toValue"].toUpperCase()}`}>
-                        {Math.floor(result.data["value"] * result.data["currency"])}
-                      </SimpleCell>
-                    ) : (
-                      <Spinner />
+                        <Checkbox onChange={(e) => setButtonActive(e.target.checked)} checked={buttonActive}>Активировать кнопку</Checkbox>
+                        <FormItem>
+                          <Button onClick={convertValue} disabled={!buttonActive} mode="primary" stretched size="l">Конвертировать!</Button>
+                        </FormItem>
+                      </FormLayout>
                     )}
                   </Group>
-                ) : null}
-              </Panel>
-            </View>
-          </SplitCol>
-        </SplitLayout>
-      </AppRoot>
+                  {!["passive", "error"].includes(result.status) ? (
+                    <Group header={<Header mode="secondary">Результат</Header>}>
+                      {result.status == "active" ? (
+                        <SimpleCell subtitle={`${result.data["fromValue"].toUpperCase()} => ${result.data["toValue"].toUpperCase()}`}>
+                          {Math.floor(result.data["value"] * result.data["currency"])}
+                        </SimpleCell>
+                      ) : (
+                        <Spinner />
+                      )}
+                    </Group>
+                  ) : null}
+                </Panel>
+              </View>
+            </SplitCol>
+          </SplitLayout>
+        </AppRoot>
+      </AdaptivityProvider>
     </ConfigProvider>
   );
 }
